@@ -13,12 +13,7 @@
 # Install GitLab and its dependencies.
 - name: Install GitLab dependencies.
   package: name={{ item }} state=present
-  with_items:
-    - openssh-server
-    - postfix
-    - curl
-    - openssl
-    - tzdata
+  with_items: "{{ gitlab_packages_dependencies }}"
 
 - name: Download GitLab repository installation script.
   get_url:
@@ -40,7 +35,7 @@
   package:
     name: "{{ gitlab_package_name | default(gitlab_edition) }}"
     state: present
-  when: not gitlab_file.stat.exists
+#  when: not gitlab_file.stat.exists
 
 # Start and configure GitLab. Sometimes the first run fails, but after that,
 # restarts fix problems, so ignore failures on this run.
